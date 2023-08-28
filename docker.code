@@ -1,0 +1,44 @@
+FROM ubuntu:22.04
+
+# Install all dependencies.
+RUN apt-get update -y && \
+apt install -y nginx curl zip
+
+# Append "daemon off;" command to exisisting nginx.config file.
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+
+# Download 2048-game file using curl command in /var/www/html/ directory.
+RUN curl -o /var/www/html/master.zip -L https://codeload.github.com/gabrielecirulli/2048/zip/master
+
+# Unzip the downloaded file and copy content of 2048-master dir to /var/www/html/ directory and remove unwanted files.
+RUN cd /var/www/html/ && \
+unzip master.zip && \
+mv 2048-master/* . && \
+rm -rf 2048-master master.zip
+
+# Expose the port for port maping while creating container.
+EXPOSE 80
+
+# This command will start the application.
+CMD ["/usr/sbin/nginx", "-c", "/etc/nginx/nginx.conf"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+FROM ubuntu:22.04
+RUN apt-get update
+RUN apt-get install -y nginx zip curl
+RUN echo "daemon off;">>/etc/nginx/nginx.conf
+RUN curl -o /var/www/html/master.zip -L https://codeload.github.com/jabir000/2048/zip/master
+RUN cd /var/www/html/ && unzip master.zip && mv 2048-master/* . && rm -rf 2048-master master.zip
+EXPOSE 80
+CMD ["/usr/sbin/nginx", "-c", "/etc/nginx/nginx.conf"
